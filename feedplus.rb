@@ -63,9 +63,10 @@ if options.id.empty?
 end
 
 uri = URI("https://www.googleapis.com/plus/v1/people/#{options.id}/activities/public")
-params = { :fields => 'items(actor/displayName,object(actor/displayName,attachments(content,displayName,fullImage/url),content),title,published,updated,url)',
+params = { :fields => 'items(actor/displayName,object(actor/displayName,attachments(content,displayName,fullImage/url),content),title,published,updated,url),nextPageToken',
            :key => 'AIzaSyDjcCZGSGTIaMA3VXmEjATkTlX4iRAoPiM',
-           :maxResults => 100 }
+           :maxResults => 100,
+           :pageToken => 'nextPageToken' }
 uri.query = URI.encode_www_form(params)
 
 res = Net::HTTP.get_response(uri)
