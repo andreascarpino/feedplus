@@ -88,6 +88,13 @@ if res.is_a?(Net::HTTPSuccess)
         
         maker.items.new_item do |item|
           item.title = post.fetch("title")
+
+          # Elide title when text is very long
+          if item.title.length >= 40
+            item.title = item.title[0, 37]
+            item.title += '...'
+          end
+
           item.link = post.fetch("url")
           item.description = content
           item.pubDate = post.fetch("updated")
