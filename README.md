@@ -11,4 +11,4 @@ An RSS feed generator for the public posts on Google+ of any account.
     -h, --help                       Show this message
 
 # Example usage
-    ruby feedplus.rb --id 104652450278570828775 -f kde, qt -t "Scarpino's posts on G+" -u "http://www.andreascarpino.it/feed.xml"
+    ruby feedplus.rb --id 104652450278570828775 -f kde, qt -t "Andrea Scarpino - KDE" -u "http://www.andreascarpino.it/kde.xml"
