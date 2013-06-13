@@ -63,7 +63,7 @@ if options.id.empty?
 end
 
 uri = URI("https://www.googleapis.com/plus/v1/people/#{options.id}/activities/public")
-params = { :fields => 'items(actor/displayName,object(actor/displayName,attachments(content,displayName,fullImage/url),content),title,updated,url)',
+params = { :fields => 'items(actor/displayName,object(actor/displayName,attachments(content,displayName,fullImage/url),content),title,published,updated,url)',
            :key => 'AIzaSyDjcCZGSGTIaMA3VXmEjATkTlX4iRAoPiM',
            :maxResults => 100 }
 uri.query = URI.encode_www_form(params)
@@ -99,7 +99,7 @@ if res.is_a?(Net::HTTPSuccess)
 
             item.link = post.fetch("url")
             item.description = content
-            item.pubDate = post.fetch("updated")
+            item.pubDate = post.fetch("published")
             item.author = post.fetch("actor").fetch("displayName")
 
             if post.fetch("object").has_key?("attachments")
