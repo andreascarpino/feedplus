@@ -92,47 +92,48 @@ def makeRSS
 
     catch :done do
       items.fetch("items").each do |post|
-        content = post.fetch("object").fetch("content")
-
         catch :none do
           $options.hashtags.each do |tag|
-            throw :none unless content.downcase.include?("##{tag}")
+            throw :none unless post.fetch("object").fetch("content").downcase.include?("##{tag}")
           end
-        
-          maker.items.new_item do |item|
-            item.title = post.fetch("title")
 
-            # Elide title when text is very long
-            if item.title.length >= 40
-              item.title = item.title[0, 37]
-              item.title += '...'
-            end
+          addPost(maker, post)
 
-            item.link = post.fetch("url")
-            item.description = content
-            item.pubDate = post.fetch("published")
-            item.author = post.fetch("actor").fetch("displayName")
-
-            if post.fetch("object").has_key?("attachments")
-              item.description += "<br /><br />"
-
-              attachments = post.fetch("object").fetch("attachments")
-              if attachments.first.has_key?("fullImage")
-                url = attachments.first.fetch("fullImage").fetch("url")
-                item.description += "<a href='#{url}'><img src='#{url}'></a>"
-              end
-            end
-
-            counter += 1
-          end
+          counter += 1
+          throw :done if counter >= $options.limit
         end
-
-        throw :done if counter >= $options.limit
       end
     end
   end
 
   rss
+end
+
+def addPost(maker, post)
+  maker.items.new_item do |item|
+    item.title = post.fetch("title")
+
+    # Elide title when text is very long
+    if item.title.length >= 40
+      item.title = item.title[0, 37]
+      item.title += '...'
+    end
+
+    item.link = post.fetch("url")
+    item.description = post.fetch("object").fetch("content")
+    item.pubDate = post.fetch("published")
+    item.author = post.fetch("actor").fetch("displayName")
+
+    if post.fetch("object").has_key?("attachments")
+      item.description += "<br /><br />"
+
+      attachments = post.fetch("object").fetch("attachments")
+      if attachments.first.has_key?("fullImage")
+        url = attachments.first.fetch("fullImage").fetch("url")
+        item.description += "<a href='#{url}'><img src='#{url}'></a>"
+      end
+    end
+  end
 end
 
 parse(ARGV)
