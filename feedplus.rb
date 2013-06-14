@@ -77,14 +77,15 @@ res = Net::HTTP.get_response(uri)
 if res.is_a?(Net::HTTPSuccess)
   items = JSON.parse(res.body)
 
-  catch :done do
-    rss = RSS::Maker.make("2.0") do |maker|
-      channel = maker.channel
-      channel.title = options.feedTitle
-      channel.description = channel.title
-      channel.link = options.feedUrl
+  rss = RSS::Maker.make("2.0") do |maker|
+    channel = maker.channel
+    channel.title = options.feedTitle
+    channel.description = channel.title
+    channel.link = options.feedUrl
 
-      counter = 0
+    counter = 0
+
+    catch :done do
       items.fetch("items").each do |post|
         content = post.fetch("object").fetch("content")
 
@@ -124,9 +125,9 @@ if res.is_a?(Net::HTTPSuccess)
         throw :done if counter >= options.limit
       end
     end
-    
-    puts rss
   end
+
+  puts rss
 else
   puts "Something went wrong :-("
 end
