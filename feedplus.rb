@@ -30,7 +30,7 @@ $options.feedUrl = "http://your.domain.com/"
 
 def getPosts(pageToken = "nextPageToken")
   uri = URI("https://www.googleapis.com/plus/v1/people/#{$options.id}/activities/public")
-  params = { :fields => 'items(actor/displayName,object(actor/displayName,attachments(content,displayName,fullImage/url),content),title,published,updated,url),nextPageToken',
+  params = { :fields => 'items(actor/displayName,annotation,object(actor/displayName,attachments(content,displayName,fullImage/url),content),published,title,updated,url,verb),nextPageToken',
              :key => 'AIzaSyDjcCZGSGTIaMA3VXmEjATkTlX4iRAoPiM',
              :maxResults => 100,
              :pageToken => pageToken }
@@ -128,7 +128,14 @@ def addPost(maker, post)
     end
 
     item.link = post.fetch("url")
-    item.description = post.fetch("object").fetch("content")
+
+    item.description = ""
+    if post.fetch("verb").eql?("share")
+      if post.has_key?("annotation")
+        item.description = post.fetch("annotation")
+      end
+    end
+    item.description += post.fetch("object").fetch("content")
     item.pubDate = post.fetch("published")
     item.author = post.fetch("actor").fetch("displayName")
 
