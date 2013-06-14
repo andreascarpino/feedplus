@@ -41,7 +41,7 @@ opt_parser = OptionParser.new do |opts|
     options.hashtags = tags.map{|t| t.downcase}
   end
 
-  opts.on("-l", "--limit n", "Max N entries for feed") do |limit|
+  opts.on("-l", "--limit <n>", "Max N entries for feed") do |limit|
     options.limit = limit
   end
 
