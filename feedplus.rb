@@ -91,16 +91,24 @@ def makeRSS
     counter = 0
 
     catch :done do
-      items.fetch("items").each do |post|
-        catch :none do
-          $options.hashtags.each do |tag|
-            throw :none unless post.fetch("object").fetch("content").downcase.include?("##{tag}")
+      while counter < $options.limit
+        items.fetch("items").each do |post|
+          catch :none do
+            $options.hashtags.each do |tag|
+              throw :none unless post.fetch("object").fetch("content").downcase.include?("##{tag}")
+            end
+
+            addPost(maker, post)
+
+            counter += 1
+            throw :done if counter >= $options.limit
           end
+        end
 
-          addPost(maker, post)
-
-          counter += 1
-          throw :done if counter >= $options.limit
+        if items.has_key?("nextPageToken")
+          items = getPosts(items.fetch("nextPageToken"))
+        else
+          break
         end
       end
     end
