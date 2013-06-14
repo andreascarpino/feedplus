@@ -41,6 +41,10 @@ opt_parser = OptionParser.new do |opts|
     options.hashtags = tags.map{|t| t.downcase}
   end
 
+  opts.on("-l", "--limit n", "Max N entries for feed") do |limit|
+    options.limit = limit
+  end
+
   opts.on("-t", "--title <title>", "Feed title") do |title|
     options.feedTitle = title
   end
