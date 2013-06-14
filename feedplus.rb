@@ -59,7 +59,7 @@ def parse(args)
       $options.hashtags = tags.map{|t| t.downcase}
     end
 
-    opts.on("-l", "--limit <n>", "Max N entries for feed. (Default to 20)") do |limit|
+    opts.on("-l", "--limit <n>", Integer, "Max N entries for feed. (Default to 20)") do |limit|
       $options.limit = limit
     end
 
