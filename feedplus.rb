@@ -80,6 +80,61 @@ def parse(args)
   opt_parser.parse!(args)
 end
 
+def makeRSS
+  rss = RSS::Maker.make("2.0") do |maker|
+    channel = maker.channel
+    channel.title = $options.feedTitle
+    channel.description = channel.title
+    channel.link = $options.feedUrl
+
+    items = getPosts
+    counter = 0
+
+    catch :done do
+      items.fetch("items").each do |post|
+        content = post.fetch("object").fetch("content")
+
+        catch :none do
+          $options.hashtags.each do |tag|
+            throw :none unless content.downcase.include?("##{tag}")
+          end
+        
+          maker.items.new_item do |item|
+            item.title = post.fetch("title")
+
+            # Elide title when text is very long
+            if item.title.length >= 40
+              item.title = item.title[0, 37]
+              item.title += '...'
+            end
+
+            item.link = post.fetch("url")
+            item.description = content
+            item.pubDate = post.fetch("published")
+            item.author = post.fetch("actor").fetch("displayName")
+
+            if post.fetch("object").has_key?("attachments")
+              item.description += "<br /><br />"
+
+              attachments = post.fetch("object").fetch("attachments")
+              if attachments.first.has_key?("fullImage")
+                url = attachments.first.fetch("fullImage").fetch("url")
+                item.description += "<a href='#{url}'><img src='#{url}'></a>"
+              end
+            end
+
+            counter += 1
+          end
+        end
+
+        throw :done if counter >= $options.limit
+      end
+    end
+  end
+
+  rss
+end
+
 parse(ARGV)
 
 if $options.id.empty?
@@ -87,55 +142,6 @@ if $options.id.empty?
   exit
 end
 
-rss = RSS::Maker.make("2.0") do |maker|
-  channel = maker.channel
-  channel.title = $options.feedTitle
-  channel.description = channel.title
-  channel.link = $options.feedUrl
-
-  items = getPosts
-  counter = 0
-
-  catch :done do
-    items.fetch("items").each do |post|
-      content = post.fetch("object").fetch("content")
-
-      catch :none do
-        $options.hashtags.each do |tag|
-          throw :none unless content.downcase.include?("##{tag}")
-        end
-        
-        maker.items.new_item do |item|
-          item.title = post.fetch("title")
-
-          # Elide title when text is very long
-          if item.title.length >= 40
-            item.title = item.title[0, 37]
-            item.title += '...'
-          end
-
-          item.link = post.fetch("url")
-          item.description = content
-          item.pubDate = post.fetch("published")
-          item.author = post.fetch("actor").fetch("displayName")
-
-          if post.fetch("object").has_key?("attachments")
-            item.description += "<br /><br />"
-
-            attachments = post.fetch("object").fetch("attachments")
-            if attachments.first.has_key?("fullImage")
-              url = attachments.first.fetch("fullImage").fetch("url")
-              item.description += "<a href='#{url}'><img src='#{url}'></a>"
-            end
-          end
-
-          counter += 1
-        end
-      end
-
-      throw :done if counter >= $options.limit
-    end
-  end
-end
+rss = makeRSS
 
 puts rss unless rss.nil?
