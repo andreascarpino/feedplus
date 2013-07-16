@@ -49,17 +49,17 @@ def parse(args)
   opt_parser = OptionParser.new do |opts|
     opts.banner = "Usage: feedplus.rb [options]"
     opts.separator ""
-    opts.separator "Specific options:"
+    opts.separator "Options:"
 
-    opts.on("--id <id>", "--user <id>", "Google+ user ID") do |id|
+    opts.on("-i <id>", "--user-id <id>", "Google+ User ID") do |id|
       $options.id = id
     end
 
-    opts.on("-f", "--filter tag1, tag2, ...", Array, "Only posts that have these hashtags") do |tags|
+    opts.on("-f", "--filter <tag1, tag2, ...>", Array, "Fetch only posts having these hashtags") do |tags|
       $options.hashtags = tags.map{|t| t.downcase}
     end
 
-    opts.on("-l", "--limit <n>", Integer, "Max N entries for feed. (Default to 20)") do |limit|
+    opts.on("-l", "--limit <n>", Integer, "Fetch at most N posts per feed (default: 20)") do |limit|
       $options.limit = limit
     end
 
@@ -67,11 +67,11 @@ def parse(args)
       $options.feedTitle = title
     end
   
-    opts.on("-u", "--url <url>", "Feed url") do |url|
+    opts.on("-u", "--url <url>", "Feed URL") do |url|
       $options.feedUrl = url
     end
 
-    opts.on_tail("-h", "--help", "Show this message") do
+    opts.on_tail("-h", "--help", "Show this help") do
       puts opts
       exit
     end
@@ -159,7 +159,7 @@ end
 parse(ARGV)
 
 if $options.id.empty?
-  puts "Please, specify an user id (see --help)."
+  puts "Please, specify a user ID or run with `-h` option to get help"
   exit
 end
 
