@@ -20,7 +20,7 @@ Also, Feed+ allows to filter posts by hashtags.
 ## Running
 You need ruby, then exec:
 
-    $ git clone git://github.com/scarpin0/feedplus.git
+    $ git clone git://github.com/andreascarpino/feedplus.git
     $ cd feedplus
     $ gem install bundler
     $ bundle install
