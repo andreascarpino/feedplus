@@ -6,6 +6,8 @@ An RSS feed generator based on your Google+ posts.
 At the moment Google+ API allows to fetch only public posts. Good news is that you can fetch anyone posts, not only yours.
 Also, Feed+ allows to filter posts by hashtags.
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=andreascarpino&url=https://github.com/andreascarpino/feedplus&title=Feed+&language=&tags=github&category=software)
+
 ## Options
         --id, --user <id>            Google+ user ID
     -f, --filter <tag1, tag2, ...>   Fetch only posts having these hashtags

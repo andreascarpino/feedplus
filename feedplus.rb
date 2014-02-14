@@ -66,7 +66,7 @@ def parse(args)
     opts.on("-t", "--title <title>", "Feed title") do |title|
       $options.feedTitle = title
     end
-  
+ 
     opts.on("-u", "--url <url>", "Feed URL") do |url|
       $options.feedUrl = url
     end
