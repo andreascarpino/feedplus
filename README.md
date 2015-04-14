@@ -1,12 +1,12 @@
 Feed+
 =====
 
-An RSS feed generator based on your Google+ posts.
+An RSS feed generator based on Google+ posts.
 
 At the moment Google+ API allows to fetch only public posts. Good news is that you can fetch anyone posts, not only yours.
 Also, Feed+ allows to filter posts by hashtags.
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=andreascarpino&url=https://github.com/andreascarpino/feedplus&title=Feed+&language=&tags=github&category=software)
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=andreascarpino&url=https://github.com/ilpianista/Feedplus&title=Feed+&language=&tags=github&category=software)
 
 ## Options
         --id, --user <id>            Google+ user ID
@@ -20,7 +20,7 @@ Also, Feed+ allows to filter posts by hashtags.
     ruby feedplus.rb --id 104652450278570828775 -f kde, qt -t "Andrea Scarpino - KDE" -u "http://www.andreascarpino.it/kde.xml"
 
 ## Running
-You need ruby, then exec:
+You need the bundler gem (`ruby`), then exec:
 
     $ git clone git://github.com/andreascarpino/feedplus.git
     $ cd feedplus
